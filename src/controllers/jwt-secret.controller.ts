@@ -6,7 +6,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Jwt-secret')
+@ApiTags('Jwt Secret')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('jwt-secrets')

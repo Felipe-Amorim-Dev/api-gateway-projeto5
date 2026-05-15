@@ -3,6 +3,7 @@ import { IUserService } from '../interfaces/services/user-service.interface';
 import { UsersRepository } from '../repositories/user.repository';
 import { CreateUserDto } from '../dtos/users/create-user.dto';
 import { UpdateUserDto } from '../dtos/users/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService implements IUserService {
@@ -15,7 +16,8 @@ export class UsersService implements IUserService {
       throw new ConflictException('Já existe um usuário com este e-mail.');
     }
 
-    return this.usersRepository.create(data);
+    const passwordHash = await bcrypt.hash(data.password, 10);
+    return this.usersRepository.create({...data, password: passwordHash});
   }
 
   async findAll() {

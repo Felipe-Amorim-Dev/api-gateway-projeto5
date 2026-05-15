@@ -4,7 +4,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Audit')
+@ApiTags('Access Audit')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('access-audits')
