@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 
@@ -8,6 +7,7 @@ import { RouteConfigsRepository } from './repositories/route-config.repository';
 import { RequestLogsRepository } from './repositories/request-logs.repository';
 import { AccessAuditsRepository } from './repositories/access-audit.repository';
 import { RefreshTokensRepository } from './repositories/refresh-token.repository';
+import { JwtSecretsRepository } from './repositories/jwt-secret.repository';
 
 import { UsersService } from './services/user.service';
 import { RouteConfigsService } from './services/route-config.service';
@@ -15,11 +15,12 @@ import { RequestLogsService } from './services/request-logs.service';
 import { AccessAuditsService } from './services/access-audit.service';
 import { AuthService } from './services/auth.service';
 import { GatewayService } from './services/gateway.service';
+import { JwtSecretsService } from './services/jwt-secret.service';
 
 import { AuthController } from './controllers/auth.controller';
 import { UsersController } from './controllers/user.controller';
 import { RouteConfigsController } from './controllers/route-config.controller';
-//import { JwtSecretsController } from './controllers/jwt-secret.controller';
+import { JwtSecretsController } from './controllers/jwt-secret.controller';
 import { RequestLogsController } from './controllers/request-log.controller';
 import { AccessAuditsController } from './controllers/access-audit.controller';
 import { GatewayController } from './controllers/gateway.controller';
@@ -40,12 +41,11 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
       },
     }),
   ],
-  controllers: [
-    AppController,
+  controllers: [    
     AuthController,
     UsersController,
     RouteConfigsController,
-    //JwtSecretsController,
+    JwtSecretsController,
     RequestLogsController,
     AccessAuditsController,
     GatewayController,
@@ -57,10 +57,12 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
     RequestLogsRepository,
     AccessAuditsRepository,
     RefreshTokensRepository,
+    JwtSecretsRepository,
     UsersService,
     RouteConfigsService,
     RequestLogsService,
     AccessAuditsService,
+    JwtSecretsService,
     PassportJwt,
     JwtAuthGuard,
     AuthService,

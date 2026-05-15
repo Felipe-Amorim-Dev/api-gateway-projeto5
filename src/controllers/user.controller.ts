@@ -5,7 +5,10 @@ import { UpdateUserDto } from '../dtos/users/update-user.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 import { Public } from 'src/decorators/public.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
@@ -22,17 +25,17 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get('buscar:id')
+  @Get('buscar/:id')
   async findById(@Param('id') id: string) {
     return this.usersService.findById(id);
   }
 
-  @Put('atualizar-usuario:id')
+  @Put('atualizar-usuario/:id')
   async update(@Param('id') id: string, @Body() data: UpdateUserDto) {
     return this.usersService.update(id, data);
   }
 
-  @Delete('deleter-usuario:id')
+  @Delete('deleter-usuario/:id')
   async delete(@Param('id') id: string) {
     await this.usersService.delete(id);
 

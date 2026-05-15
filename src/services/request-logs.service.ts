@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { IRequestLogService } from '../interfaces/services/request-log-service.interface';
 import { RequestLogsRepository } from '../repositories/request-logs.repository';
-import { CreateRequestLogDto } from '../dtos/logs/create-log.dto';
+import { CreateRequestLogDto } from '../dtos/audit/create-log.dto';
 
 @Injectable()
 export class RequestLogsService implements IRequestLogService {

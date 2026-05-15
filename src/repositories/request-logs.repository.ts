@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { IRequestLogRepository } from '../interfaces/repositories/request-log-repository.interface';
-import { CreateRequestLogDto } from 'src/dtos/logs/create-log.dto';
+import { CreateRequestLogDto } from 'src/dtos/audit/create-log.dto';
 
 @Injectable()
 export class RequestLogsRepository implements IRequestLogRepository {

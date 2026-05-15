@@ -1,5 +1,5 @@
 import { AccessAudit } from 'src/models/access-audit.model';
-import { CreateAccessAuditDto } from 'src/dtos/logs/create-access-audit.dto';
+import { CreateAccessAuditDto } from 'src/dtos/audit/create-access-audit.dto';
 
 export interface IAccessAuditService {
   create(data: CreateAccessAuditDto): Promise<AccessAudit>;

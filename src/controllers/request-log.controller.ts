@@ -2,7 +2,10 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { RequestLogsService } from '../services/request-logs.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Logs')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('request-logs')
 export class RequestLogsController {

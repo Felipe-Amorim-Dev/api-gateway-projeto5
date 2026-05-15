@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { IAccessAuditRepository } from '../interfaces/repositories/access-audit-repository.interface';
-import { CreateAccessAuditDto } from 'src/dtos/logs/create-access-audit.dto';
+import { CreateAccessAuditDto } from 'src/dtos/audit/create-access-audit.dto';
 
 @Injectable()
 export class AccessAuditsRepository implements IAccessAuditRepository {

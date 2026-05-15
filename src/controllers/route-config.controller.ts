@@ -4,7 +4,10 @@ import { CreateRouteDto } from 'src/dtos/route/create-route.dto';
 import { UpdateRouteDto } from 'src/dtos/route/update-route.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Route')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('route-configs')
 export class RouteConfigsController {
