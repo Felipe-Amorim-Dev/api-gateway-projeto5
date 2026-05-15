@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { ConfigModule } from '@nestjs/config';
 
 import { UsersRepository } from './repositories/user.repository';
 import { RouteConfigsRepository } from './repositories/route-config.repository';
@@ -29,13 +30,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { PassportJwt } from './guard/passport-jwt';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { ExternalJwtGuard } from './guard/external-jwt.guard';
 
 @Module({
   imports: [
     PrismaModule,
     PassportModule,
-    JwtModule.register({
-      secret: 'p2ReAHISLU65lsXQl+FtfA==',
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    JwtModule.register({    
+      secret: process.env.JWT_SECRET_GATEWAY,  
       signOptions: {
         expiresIn: '1h',
       },
@@ -65,6 +71,7 @@ import { JwtAuthGuard } from './guard/jwt-auth.guard';
     JwtSecretsService,
     PassportJwt,
     JwtAuthGuard,
+    ExternalJwtGuard,
     AuthService,
     GatewayService
   ],

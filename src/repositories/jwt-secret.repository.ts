@@ -10,6 +10,11 @@ export class JwtSecretsRepository implements IJwtSecretRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateJwtSecretDto) {
+    await this.prisma.jwt_secrets.updateMany({
+      where: { isActive: true},
+      data: { isActive: false}
+    });
+
     return this.prisma.jwt_secrets.create({
       data: {
         id: randomUUID(),

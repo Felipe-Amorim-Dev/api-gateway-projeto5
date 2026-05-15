@@ -1,14 +1,17 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import axios from 'axios';
+import * as jwt from 'jsonwebtoken'
 import { IGatewayService } from '../interfaces/services/gateway-service.interface';
 import { RouteConfigsRepository } from '../repositories/route-config.repository';
 import { RequestLogsService } from './request-logs.service';
+import { JwtSecretsService } from './jwt-secret.service';
 
 @Injectable()
 export class GatewayService implements IGatewayService {
   constructor(
     private readonly routeConfigsRepository: RouteConfigsRepository,
     private readonly requestLogsService: RequestLogsService,
+    private readonly jwtSecretService: JwtSecretsService
   ) {}
 
   async processRequest(
@@ -30,15 +33,18 @@ export class GatewayService implements IGatewayService {
       throw new NotFoundException('Rota não encontrada.');
     }
 
-    if (route.requiresAuth && !headers.authorization) {
-      throw new UnauthorizedException('Token não informado.');
+    if (route.requiresAuth) {
+      throw this.validationExternalToken(headers.authorization);
     }
 
     try {
       const response = await axios({
         method,
         url: route.targetUrl,
-        headers,
+        headers: {
+          ...headers,
+          host: undefined,
+        },
         data: body,
         params: query,
       });
@@ -74,6 +80,26 @@ export class GatewayService implements IGatewayService {
       });
 
       throw error;
+    }
+  }
+
+  private async validationExternalToken(authorization?: string){
+    if(!authorization){
+      throw new UnauthorizedException('Token não informado.');
+    }
+
+    const [type, token] = authorization.split(' ');
+
+    if(type !== 'Bearer' || !token){
+      throw new UnauthorizedException('Token invalido.');
+    }
+
+    const activeSecret = await this.jwtSecretService.findActive();
+
+    try{
+      jwt.verify(token, activeSecret.secret);
+    }catch {
+      throw new UnauthorizedException('Token externo invalido.');
     }
   }
 }
