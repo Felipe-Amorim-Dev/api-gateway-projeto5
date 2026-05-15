@@ -7,10 +7,16 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 @Injectable()
 export class PassportJwt extends PassportStrategy(Strategy) {
   constructor() {
+    const secret = process.env.JWT_SECRET_GATEWAY;
+
+    if(!secret){
+      throw new Error("JWT_SECRET_GATEWAY não configurado no .env")
+    }
+
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET_GATEWAY,
+      secretOrKey: secret,
     });
   }
 
