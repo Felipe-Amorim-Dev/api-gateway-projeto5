@@ -5,11 +5,18 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
-    .setTitle('API Gateway Projeto')
+    .setTitle('API Gateway Ecommerce')
     .setDescription('Documentação da API Gateway com NestJS')
-    .setVersion('1.0')
+    .setVersion('1.5')
     .addBearerAuth()
     .build();
+
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
+    credentials: true,
+  });
 
   const document = SwaggerModule.createDocument(app, config);
 

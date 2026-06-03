@@ -34,7 +34,7 @@ export class GatewayService implements IGatewayService {
     }
 
     if (route.requiresAuth) {
-      throw this.validationExternalToken(headers.authorization);
+      await this.validationExternalToken(headers.authorization);
     }
 
     try {

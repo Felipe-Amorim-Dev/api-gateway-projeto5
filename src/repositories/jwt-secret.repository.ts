@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto';
+import { randomBytes, randomUUID } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { IJwtSecretRepository } from '../interfaces/repositories/jwt-secret-repository.interface';
 import { CreateJwtSecretDto } from 'src/dtos/jwt-secret/create-jwt-secret.dto';
 import { UpdateJwtSecretDto } from 'src/dtos/jwt-secret/update.jwt.secret.dto';
+import { JwtSecret } from 'src/models/jwt-secret.model';
 
 @Injectable()
 export class JwtSecretsRepository implements IJwtSecretRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
-  async create(data: CreateJwtSecretDto) {
+  async create(data: CreateJwtSecretDto): Promise<JwtSecret> {
     await this.prisma.jwt_secrets.updateMany({
-      where: { isActive: true},
-      data: { isActive: false}
+      where: {
+        isActive: true,
+      },
+      data: {
+        isActive: false,
+      },
     });
+
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
 
     return this.prisma.jwt_secrets.create({
       data: {
         id: randomUUID(),
-        name: data.name,
-        secret: data.secret,
+        name: data.name ?? `Secret ${new Date().toISOString()}`,
+        secret: randomBytes(64).toString('hex'),
         isActive: true,
+        expiresAt,
       },
     });
   }
@@ -43,6 +52,9 @@ export class JwtSecretsRepository implements IJwtSecretRepository {
     return this.prisma.jwt_secrets.findFirst({
       where: {
         isActive: true,
+        expiresAt: {
+          gt: new Date(),
+        },
       },
     });
   }

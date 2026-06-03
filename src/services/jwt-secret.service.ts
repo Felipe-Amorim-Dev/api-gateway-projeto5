@@ -6,7 +6,7 @@ import { UpdateJwtSecretDto } from 'src/dtos/jwt-secret/update.jwt.secret.dto';
 
 @Injectable()
 export class JwtSecretsService implements IJwtSecretService {
-  constructor(private readonly jwtSecretsRepository: JwtSecretsRepository) {}
+  constructor(private readonly jwtSecretsRepository: JwtSecretsRepository) { }
 
   async create(data: CreateJwtSecretDto) {
     return this.jwtSecretsRepository.create(data);
@@ -46,5 +46,14 @@ export class JwtSecretsService implements IJwtSecretService {
     await this.findById(id);
 
     await this.jwtSecretsRepository.delete(id);
+  }
+
+  async findExternalActive() {
+    const secret = await this.findActive();
+
+    return {
+      secret: secret.secret,
+      expiresAt: secret.expiresAt,
+    };
   }
 }

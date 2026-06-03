@@ -3,6 +3,7 @@ export class JwtSecret {
   name: string;
   secret: string;
   isActive: boolean;
+  expiresAt: Date;
   createdAt: Date;
   updatedAt: Date;
 
@@ -11,6 +12,7 @@ export class JwtSecret {
     this.name = data.name;
     this.secret = data.secret;
     this.isActive = data.isActive;
+    this.expiresAt = data.expiresAt;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }

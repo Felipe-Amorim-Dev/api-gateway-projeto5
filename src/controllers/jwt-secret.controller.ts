@@ -1,17 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Headers, Post, Put, UnauthorizedException, } from '@nestjs/common';
 import { JwtSecretsService } from '../services/jwt-secret.service';
 import { CreateJwtSecretDto } from '../dtos/jwt-secret/create-jwt-secret.dto';
 import { UpdateJwtSecretDto } from 'src/dtos/jwt-secret/update.jwt.secret.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/decorators/public.decorator';
 
 @ApiTags('Jwt Secret')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('jwt-secrets')
 export class JwtSecretsController {
-  constructor(private readonly jwtSecretsService: JwtSecretsService) {}
+  constructor(private readonly jwtSecretsService: JwtSecretsService) { }
 
   @Post()
   async create(@Body() data: CreateJwtSecretDto) {
@@ -45,5 +46,15 @@ export class JwtSecretsController {
     return {
       message: 'JWT Secret removido com sucesso.',
     };
+  }
+
+  @Public()
+  @Get('external/active')
+  async findExternalActive(@Headers('x-api-key') apiKey: string) {
+    if (!apiKey || apiKey !== process.env.INTERNAL_API_KEY) {
+      throw new UnauthorizedException('API Key inválida.');
+    }
+
+    return this.jwtSecretsService.findExternalActive();
   }
 }

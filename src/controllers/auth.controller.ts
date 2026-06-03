@@ -2,12 +2,14 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dtos/auth/login.dto';
 import { RefreshTokenDto } from '../dtos/auth/refresh-token.dto';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
+  @Public()
   async login(@Body() data: LoginDto) {
     return this.authService.login(data);
   }

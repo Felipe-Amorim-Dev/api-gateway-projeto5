@@ -1,4 +1,3 @@
 export class CreateJwtSecretDto {
-  name!: string;
-  secret!: string;
+  name!: string;  
 }
